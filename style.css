@@ -240,7 +240,7 @@ section {
 .alt {
     background: var(--alt);
 }
-.wheat{background:var(--wheat)};
+.wheat{background:var(--wheat)}
 
 .two {
     display: grid;
@@ -533,6 +533,33 @@ footer {
     bottom: -90px;
     left: -90px;
 }
+
+.hero .eyebrow{color:#4A5638}
+
+
+/* Done trail and dot grid */
+.field{position:relative}
+.field .wrap{position:relative;z-index:2}
+.field::before{content:"";position:absolute;inset:0;pointer-events:none;opacity:.7;background:radial-gradient(circle,var(--line) 1.2px,transparent 1.6px) 0 0/16px 16px;-webkit-mask-image:linear-gradient(90deg,#000 calc(50% - 610px),transparent calc(50% - 550px),transparent calc(50% + 550px),#000 calc(50% + 610px));mask-image:linear-gradient(90deg,#000 calc(50% - 610px),transparent calc(50% - 550px),transparent calc(50% + 550px),#000 calc(50% + 610px))}
+.trail{position:absolute;inset:0;pointer-events:none}
+.trail .line{position:absolute;left:0;top:0;z-index:1;overflow:visible}
+.trail .base{fill:none;stroke:var(--line);stroke-width:3;stroke-linecap:round;stroke-dasharray:1 9}
+.trail .prog{fill:none;stroke:var(--amber);stroke-width:2.5;stroke-linecap:round}
+.stop{position:absolute;z-index:3;width:44px;height:44px;margin:-22px 0 0 -22px;display:grid;place-items:center;border-radius:50%;background:var(--bg);border:1.5px dashed var(--soft);color:var(--soft);pointer-events:auto;transition:background .3s,color .3s,border-color .3s,transform .2s}
+.stop>svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round;transition:fill .3s}
+.stop.now{background:var(--wheat);border:2px solid var(--green);color:var(--green)}
+.stop.done{background:var(--green);border:2px solid var(--green);color:var(--on)}
+.stop.done>svg{fill:var(--on);fill-opacity:.25}
+.stop:hover{transform:scale(1.1)}
+.stop:hover>svg{fill:currentColor;fill-opacity:.35}
+.tick{position:absolute;right:-6px;bottom:-6px;width:18px;height:18px;display:grid;place-items:center;border-radius:50%;background:var(--amber);color:#fff;opacity:0;transform:scale(.4);transition:opacity .3s,transform .3s}
+.tick svg{width:11px;height:11px;fill:none;stroke:currentColor;stroke-width:3;stroke-linecap:round;stroke-linejoin:round}
+.stop.done .tick{opacity:1;transform:scale(1)}
+.stop::after{content:attr(data-label);position:absolute;top:50%;left:calc(100% + 10px);transform:translateY(-50%);white-space:nowrap;font-size:13px;font-weight:500;color:var(--ink);background:var(--card);border:1px solid var(--line);border-radius:3px;padding:4px 10px;opacity:0;pointer-events:none;transition:opacity .2s}
+.stop.r::after{left:auto;right:calc(100% + 10px)}
+.stop:hover::after{opacity:1}
+@media (prefers-reduced-motion:reduce){.stop,.stop>svg,.tick{transition:none}}
+
 
 /* From scratch by Valentine Mutembei @codingwithval */
 
