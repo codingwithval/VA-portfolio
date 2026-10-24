@@ -2,9 +2,11 @@ document.getElementById('year').textContent = new Date().getFullYear();
 /* Done trail */
 (() => {
   // One entry per section (About, Services, Process, Reviews), plus one for the end.
+  // One entry per section (About, Services, Tools, Process, Reviews), plus one for the end.
   const STOPS = [
     { icon: 'i-laptop',  label: 'Tools set up' },
     { icon: 'i-mail',    label: 'Inbox at zero' },
+    { icon: 'i-grid',    label: 'Stack ready' },
     { icon: 'i-cal',     label: 'Week scheduled' },
     { icon: 'i-headset', label: 'Clients supported' },
     { icon: 'i-check',   label: 'All done' }
@@ -105,3 +107,20 @@ document.getElementById('year').textContent = new Date().getFullYear();
   addEventListener('load', redo);
   if (document.fonts) document.fonts.ready.then(redo);
 })();
+
+/* Service cards: hover on desktop, tap on touch */
+document.querySelectorAll('.svc').forEach(card => {
+  const hint = card.querySelector('.hint');
+  const set = open => {
+    card.classList.toggle('open', open);
+    hint.setAttribute('aria-expanded', open);
+  };
+  if (matchMedia('(hover: hover)').matches) {
+    card.addEventListener('mouseenter', () => set(true));
+    card.addEventListener('mouseleave', () => set(false));
+    card.addEventListener('focusin', () => set(true));
+    card.addEventListener('focusout', () => set(false));
+  } else {
+    card.addEventListener('click', () => set(!card.classList.contains('open')));
+  }
+});
