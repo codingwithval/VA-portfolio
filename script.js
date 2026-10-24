@@ -14,11 +14,11 @@ document.getElementById('year').textContent = new Date().getFullYear();
   if (!trail) return;
   const secs = [...field.querySelectorAll(':scope > section')];
   const NS = 'http://www.w3.org/2000/svg';
-  let pts = [], els = [], samples = [], prog = null, total = 0, H = 0;
+  let pts = [], els = [], clip = null, H = 0;
 
   function build() {
     trail.innerHTML = '';
-    els = []; samples = []; prog = null;
+    els = []; clip = null;
     if (innerWidth < 1180) return;
 
     const f = field.getBoundingClientRect();
@@ -50,18 +50,21 @@ document.getElementById('year').textContent = new Date().getFullYear();
     svg.setAttribute('class', 'line');
     svg.setAttribute('width', W);
     svg.setAttribute('height', H);
+    const cp = document.createElementNS(NS, 'clipPath');
+    cp.setAttribute('id', 'trailClip');
+    clip = document.createElementNS(NS, 'rect');
+    clip.setAttribute('width', W);
+    clip.setAttribute('height', 0);
+    cp.appendChild(clip);
+    svg.appendChild(cp);
     ['base', 'prog'].forEach(c => {
       const p = document.createElementNS(NS, 'path');
       p.setAttribute('d', d);
       p.setAttribute('class', c);
+      if (c === 'prog') p.setAttribute('clip-path', 'url(#trailClip)');
       svg.appendChild(p);
-      if (c === 'prog') prog = p;
     });
     trail.appendChild(svg);
-
-    total = prog.getTotalLength();
-    prog.style.strokeDasharray = total;
-    for (let i = 0; i <= 240; i++) samples.push(prog.getPointAtLength(total * i / 240).y);
 
     pts.forEach((p, i) => {
       const s = STOPS[i] || STOPS[STOPS.length - 1];
@@ -77,13 +80,10 @@ document.getElementById('year').textContent = new Date().getFullYear();
   }
 
   function update() {
-    if (!prog) return;
+    if (!clip) return;
     const f = field.getBoundingClientRect();
     const y = innerHeight * 0.6 - f.top; // the "reading line" at 60% down the screen
-    const yc = Math.min(Math.max(y, 0), H);
-    let i = 0;
-    while (i < samples.length - 1 && samples[i] < yc) i++;
-    prog.style.strokeDashoffset = total - (total * i) / (samples.length - 1);
+    clip.setAttribute('height', Math.min(Math.max(y, 0), H));
     let found = false;
     els.forEach((el, k) => {
       const done = pts[k].y <= y;
